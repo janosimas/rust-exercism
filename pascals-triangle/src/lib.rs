@@ -11,15 +11,19 @@ impl PascalsTriangle {
         let rows: Vec<Vec<u32>> = std::iter::repeat(()).take((row_count - 1) as usize).fold(
             vec![vec![1]],
             |mut vec, _| {
-                let mut row: Vec<u32> = vec
+                let row: Vec<u32> = vec
                     .last()
                     .unwrap()
                     .windows(2)
                     .map(|a| a.iter().sum())
                     .collect();
-                row.insert(0, 1);
-                row.push(1);
-                vec.push(row);
+
+                vec.push(
+                    std::iter::once(1)
+                        .chain(row)
+                        .chain(std::iter::once(1))
+                        .collect(),
+                );
 
                 vec
             },

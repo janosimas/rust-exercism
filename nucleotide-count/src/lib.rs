@@ -29,15 +29,9 @@ pub fn count(nucleotide: char, dna: &str) -> Result<usize, char> {
 pub fn nucleotide_counts(dna: &str) -> Result<HashMap<char, usize>, char> {
     is_dna_valid(dna)?;
 
-    let mut map = VALID_NUCLETIDE
+    Ok(VALID_NUCLETIDE
         .iter()
         .copied()
-        .zip(std::iter::repeat(0 as usize).take(VALID_NUCLETIDE.len()))
-        .collect::<HashMap<char, usize>>();
-
-    dna.chars().for_each(|c| {
-        map.entry(c).and_modify(|e| *e += 1);
-    });
-
-    Ok(map)
+        .map(|c| (c, count(c, dna).unwrap_or(0)))
+        .collect::<HashMap<char, usize>>())
 }

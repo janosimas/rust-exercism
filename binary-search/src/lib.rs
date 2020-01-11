@@ -1,6 +1,6 @@
 fn _find<ElemType>(array: &[(usize, ElemType)], key: ElemType) -> Option<usize>
 where
-    ElemType: PartialOrd,
+    ElemType: Ord,
 {
     if array.len() == 1 {
         if array[0].1 == key {
@@ -25,6 +25,10 @@ where
     None
 }
 
-pub fn find(array: &[i32], key: i32) -> Option<usize> {
-    _find(&array.iter().enumerate().collect::<Vec<_>>()[..], &key)
+pub fn find<ContainerType, ElemType>(array: ContainerType, key: ElemType) -> Option<usize>
+where
+    ContainerType: AsRef<[ElemType]>,
+    ElemType: Ord,
+{
+    _find(&array.as_ref().iter().enumerate().collect::<Vec<_>>()[..], &key)
 }

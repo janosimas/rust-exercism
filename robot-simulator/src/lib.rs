@@ -1,6 +1,3 @@
-// The code below is a stub. Just enough to satisfy the compiler.
-// In order to pass the tests you can add-to or change any of this code.
-
 #[derive(PartialEq, Debug, Copy, Clone)]
 pub enum Direction {
     North,
@@ -9,7 +6,7 @@ pub enum Direction {
     West,
 }
 
-const DIRECTIONS_ORDER: [Direction; 4] = [
+static DIRECTIONS: [Direction; 4] = [
     Direction::North,
     Direction::East,
     Direction::South,
@@ -28,34 +25,23 @@ impl Robot {
     }
 
     pub fn turn_right(mut self) -> Self {
-        let index = DIRECTIONS_ORDER
+        self.d = *DIRECTIONS
             .iter()
-            .position(|d| *d == self.d)
-            .map(|i| {
-                if i == DIRECTIONS_ORDER.len() - 1 {
-                    0
-                } else {
-                    i + 1
-                }
-            })
+            .cycle()
+            .skip_while(|&d| *d != self.d)
+            .nth(1)
             .unwrap();
-        self.d = DIRECTIONS_ORDER[index];
         self
     }
 
     pub fn turn_left(mut self) -> Self {
-        let index = DIRECTIONS_ORDER
+        self.d = *DIRECTIONS
             .iter()
-            .position(|d| *d == self.d)
-            .map(|i| {
-                if i == 0 {
-                    DIRECTIONS_ORDER.len() - 1
-                } else {
-                    i - 1
-                }
-            })
+            .rev()
+            .cycle()
+            .skip_while(|&d| *d != self.d)
+            .nth(1)
             .unwrap();
-        self.d = DIRECTIONS_ORDER[index];
         self
     }
 

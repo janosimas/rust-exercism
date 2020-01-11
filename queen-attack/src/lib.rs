@@ -8,10 +8,10 @@ pub struct Queen {
 
 impl ChessPosition {
     pub fn new(rank: i32, file: i32) -> Option<Self> {
-        if !(0..8).contains(&rank) || !(0..8).contains(&file) {
-            return None;
+        match (rank, file) {
+            (0..=7, 0..=7) => Some(ChessPosition(rank, file)),
+            _ => None,
         }
-        Some(ChessPosition(rank, file))
     }
 }
 
@@ -23,7 +23,7 @@ impl Queen {
     pub fn can_attack(&self, other: &Queen) -> bool {
         self.position.0 == other.position.0
             || self.position.1 == other.position.1
-            || (self.position.0 + self.position.1 == other.position.0 + other.position.1)
-            || (self.position.0 - other.position.0 == self.position.1 - other.position.1)
+            || ((self.position.0 - other.position.0).abs()
+                == (self.position.1 - other.position.1).abs())
     }
 }
